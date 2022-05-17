@@ -40,13 +40,32 @@ int main(void)
 	
 	Chain->SetBranchAddress("particle", &Particle);
 	
-	TCanvas *c1 = new TCanvas("c1", "canvas1", 1000, 1000);
-	c1->SetGrid();
-	c1->SetBottomMargin(0.15);
+	
+	
+	
+	
+	
+	
+	
+	
+	/***********************************Ważne!!!!!*****************************************/
+	int current_id = 3212;//Należy ustawić by wszędzie działać na tej samej cząstce
+	/**************************************************************************************/
+	
+	
+	
+	
+	
+	
+	
 	
 	/***************************************Yields*********************************************/
 	
-/*		
+/*	
+	TCanvas *c1 = new TCanvas("c1", "canvas1", 1000, 1000);
+	c1->SetGrid();
+	c1->SetBottomMargin(0.15);
+
 	TH1D* yields = new TH1D("h1", "yields", 10, -150, 150);
 	
 	for(int i=0; i<Chain->GetEntries(); i++)
@@ -82,8 +101,11 @@ int main(void)
 
 
 /*****************************************Czterowektor położeń i czasu**************************************************/
-/*	
-	c1->Divide(2, 2);
+	//Należy podać jaka cząsteczka jest zapisywana w nazwie pliku oraz wpisać jej pid w pętli for
+	
+	TCanvas *c2 = new TCanvas("c2", "canvas2", 1000, 1000);
+
+	c2->Divide(2, 2);
 	
 	TH1D *histx = new TH1D("r_x", "r_{x}", 100, -10, 10);
 	histx->SetStats(0000);
@@ -140,7 +162,7 @@ int main(void)
 	for(int i=0; i<Chain->GetEntries(); i++)
 	{
 		Chain->GetEntry(i);
-		if(Particle.pid==2212)
+		if(Particle.pid==current_id)
 		{
 			histx->Fill(Particle.x);
 			histy->Fill(Particle.y);
@@ -149,34 +171,37 @@ int main(void)
 		}
 	}
 	
-	c1->cd(1);
+	c2->cd(1);
 	
 	//gPad->SetRightMargin(0.001);
 	gPad->SetLeftMargin(0.16);
 	histx->Draw();
 	
-	c1->cd(2);
+	c2->cd(2);
 	
 	gPad->SetLeftMargin(0.16);
 	histy->Draw();
 	
-	c1->cd(3);
+	c2->cd(3);
 	
 	gPad->SetLeftMargin(0.16);
 	histz->Draw();
 	
-	c1->cd(4);
+	c2->cd(4);
 	
 	gPad->SetLeftMargin(0.16);
 	histt->Draw();
 	
-	c1->SaveAs("proton - polozenia i czas.png");
-*/
+	
+
 	/***************************************Czterowektor pędów i Energii*********************************************************/
+	//Należy podać jaka cząsteczka jest zapisywana w nazwie pliku oraz wpisać jej pid w pętli for
+
+	TCanvas *c3 = new TCanvas("c3", "canvas3", 1000, 1000);
+
+	c3->Divide(2, 2);
 	
-	c1->Divide(2, 2);
-	
-	TH1D *histe = new TH1D("e", "e", 100, 0.5, 2);
+	TH1D *histe = new TH1D("e", "E", 100, 0, 1.4);
 	histe->SetStats(0000);
 	histe->GetXaxis()->SetTitle("E [GeV]");
 	histe->GetYaxis()->SetTitle("#frac{dN}{dE}");
@@ -189,10 +214,10 @@ int main(void)
 	histe->SetMarkerSize(0.7);
 	histe->Sumw2();
 	
-	TH1D *histpx = new TH1D("p_y", "p_{y}", 100, -2, 2);
+	TH1D *histpx = new TH1D("p_x", "p_{x}", 100, -1, 1);
 	histpx->SetStats(0000);
-	histpx->GetXaxis()->SetTitle("p_{y} [GeV/c]");
-	histpx->GetYaxis()->SetTitle("#frac{dN}{dp_{y}}");
+	histpx->GetXaxis()->SetTitle("p_{x} [GeV/c]");
+	histpx->GetYaxis()->SetTitle("#frac{dN}{dp_{x}}");
 	histpx->GetYaxis()->SetTitleOffset(2.2);
 	histpx->GetXaxis()->CenterTitle(true);
 	histpx->GetYaxis()->CenterTitle(true);
@@ -202,7 +227,7 @@ int main(void)
 	histpx->SetMarkerSize(0.7);
 	histpx->Sumw2();
 	
-	TH1D *histpy = new TH1D("p_y", "p_{y}", 100, -2, 2);
+	TH1D *histpy = new TH1D("p_y", "p_{y}", 100, -1, 1);
 	histpy->SetStats(0000);
 	histpy->GetXaxis()->SetTitle("p_{y} [GeV/c]");
 	histpy->GetYaxis()->SetTitle("#frac{dN}{dp_{y}}");
@@ -215,7 +240,7 @@ int main(void)
 	histpy->SetMarkerSize(0.7);
 	histpy->Sumw2();
 	
-	TH1D *histpz = new TH1D("p_z", "p_{z}", 100, -2, 2);
+	TH1D *histpz = new TH1D("p_z", "p_{z}", 100, -1, 1);
 	histpz->SetStats(0000);
 	histpz->GetXaxis()->SetTitle("p_{z} [GeV/c]");
 	histpz->GetYaxis()->SetTitle("#frac{dN}{dp_{z}}");
@@ -231,7 +256,7 @@ int main(void)
 	for(int i=0; i<Chain->GetEntries(); i++)
 	{
 		Chain->GetEntry(i);
-		if(Particle.pid==2212)
+		if(Particle.pid==current_id)
 		{
 			histpx->Fill(Particle.px);
 			histpy->Fill(Particle.py);
@@ -240,30 +265,237 @@ int main(void)
 		}
 	}
 	
-	c1->cd(1);
+	c3->cd(1);
 	
 	//gPad->SetRightMargin(0.001);
 	gPad->SetLeftMargin(0.16);
 	histpx->Draw();
 	
-	c1->cd(2);
+	c3->cd(2);
 	
 	gPad->SetLeftMargin(0.16);
 	histpy->Draw();
 	
-	c1->cd(3);
+	c3->cd(3);
 	
 	gPad->SetLeftMargin(0.16);
 	histpz->Draw();
 	
-	c1->cd(4);
+	c3->cd(4);
 	
 	gPad->SetLeftMargin(0.16);
 	histe->Draw();
 	
-	c1->SaveAs("proton - pęd i energia.png");
+	
+
+
+
+/**********************************************************************************************Różne obliczenia******************************************************************************/
+
+	TCanvas *c4 = new TCanvas("c4", "canvas1", 1000, 1000);
+	
+
+	/********************transversal momentum****************************/
+	vector<double> p1;
+	vector<double> p2;
+	
+	for(int i=0; i<Chain->GetEntries(); i++)
+	{
+		Chain->GetEntry(i);
+		if(Particle.pid==current_id)
+		{
+			p1.push_back(Particle.px);
+			p2.push_back(Particle.py);
+		}
+	}
+	
+	c4->Divide(2, 2);
+	
+	vector<double> p_T;
+	
+	for(int i = 0; i<p1.size(); i++)
+	{
+		p_T.push_back(TMath::Sqrt(TMath::Power(p1.at(i), 2)+TMath::Power(p2.at(i), 2)));
+	}
+	
+	double max1 = *max_element(std::begin(p_T), std::end(p_T));
+	double min1 = *min_element(std::begin(p_T), std::end(p_T));
+	
+	TH1D *histpt = new TH1D("p_T", "p_{T}", 100, min1, 1);
+	histpt->SetStats(0000);
+	histpt->GetXaxis()->SetTitle("p_{z} [GeV/c]");
+	histpt->GetYaxis()->SetTitle("#frac{dN}{dp_{z}}");
+	histpt->GetYaxis()->SetTitleOffset(2.2);
+	histpt->GetXaxis()->CenterTitle(true);
+	histpt->GetYaxis()->CenterTitle(true);
+	histpt->SetTitleSize(0.04);
+	histpt->SetStats(0000);
+	histpt->SetMarkerStyle(20);
+	histpt->SetMarkerSize(0.7);
+	histpt->Sumw2();
+	
+	for(int i = 0; i<p_T.size(); i++)
+	{
+		histpt->Fill(p_T.at(i));
+	}
+	gPad->SetRightMargin(0.001);
+	gPad->SetLeftMargin(0.15);
 	
 	
+	
+	//c1->SaveAs("%s - p_T.png", current_name);
+	
+	
+	/********************rapidity****************************/
+	
+	vector<double> E;
+	vector<double> p3;
+	
+	for(int i=0; i<Chain->GetEntries(); i++)
+	{
+		Chain->GetEntry(i);
+		if(Particle.pid==current_id)
+		{
+			E.push_back(Particle.e);
+			p3.push_back(Particle.pz);
+		}
+	}
+	
+	vector<double> rapidity;
+	
+	for(int i = 0; i<p3.size(); i++)
+	{
+		rapidity.push_back(0.5*TMath::Log((E.at(i)+p3.at(i))/(E.at(i)-p3.at(i))));
+	}
+	
+	double max2 = *max_element(std::begin(rapidity), std::end(rapidity));
+	double min2 = *min_element(std::begin(rapidity), std::end(rapidity));
+	
+	TH1D *histrap = new TH1D("rapidity", "y", 100, min2, max2);
+	histrap->GetXaxis()->SetTitle("y");
+	histrap->GetYaxis()->SetTitle("#frac{N}{dy}");
+	histrap->GetYaxis()->SetTitleOffset(2.2);
+	histrap->GetXaxis()->CenterTitle(true);
+	histrap->GetYaxis()->CenterTitle(true);
+	histrap->SetTitleSize(0.04);
+	histrap->SetStats(0000);
+	histrap->SetMarkerStyle(20);
+	histrap->SetMarkerSize(0.7);
+	histrap->Sumw2();
+	
+	for(int i = 0; i<rapidity.size(); i++)
+	{
+		histrap->Fill(rapidity.at(i));
+	}
+	gPad->SetLeftMargin(0.15);
+	
+	
+	
+	//c1->SaveAs("rapidity - %s.png", current_name);
+	
+	/***************************transversal coordinate*******************************/
+	vector<double> r1;
+	vector<double> r2;
+	
+	for(int i=0; i<Chain->GetEntries(); i++)
+	{
+		Chain->GetEntry(i);
+		if(Particle.pid==current_id)
+		{
+			r1.push_back(Particle.x);
+			r2.push_back(Particle.y);
+		}
+	}
+	
+	vector<double> r_T;
+	
+	for(int i = 0; i<r1.size(); i++)
+	{
+		r_T.push_back(TMath::Sqrt(TMath::Power(r1.at(i), 2)+TMath::Power(r2.at(i), 2)));
+	}
+	
+	double max3 = *max_element(std::begin(r_T), std::end(r_T));
+	double min3 = *min_element(std::begin(r_T), std::end(r_T));
+	
+	TH1D *histrt = new TH1D("r_T", "r_{T}", 100, min3, 20);
+	histrt->GetXaxis()->SetTitle("r_{T} [fm]");
+	histrt->GetYaxis()->SetTitle("#frac{N}{dr_{T}}");
+	histrt->GetYaxis()->SetTitleOffset(2.2);
+	histrt->GetXaxis()->CenterTitle(true);
+	histrt->GetYaxis()->CenterTitle(true);
+	histrt->SetTitleSize(0.04);
+	histrt->SetStats(0000);
+	histrt->SetMarkerStyle(20);
+	histrt->SetMarkerSize(0.7);
+	histrt->Sumw2();
+	
+	for(int i = 0; i<r_T.size(); i++)
+	{
+		histrt->Fill(r_T.at(i));
+	}
+	gPad->SetLeftMargin(0.15);
+	
+	
+	
+	//c1->SaveAs("transverse coordinate - %s.png", current_name);
+	
+	
+	/**********************************pseudorapidity********************************/
+	
+	vector<double> pseudorapidity;
+	
+	for(int i = 0; i<p1.size(); i++)
+	{
+		pseudorapidity.push_back(0.5*TMath::Log((E.at(i)+p1.at(i))/(E.at(i)-p1.at(i))));
+	}
+	
+	double max4 = *max_element(std::begin(pseudorapidity), std::end(pseudorapidity));
+	double min4 = *min_element(std::begin(pseudorapidity), std::end(pseudorapidity));
+	
+	TH1D *histpseurap = new TH1D("pseudorapidity", "#eta", 100, min4, max4);
+	histpseurap->GetXaxis()->SetTitle("#eta");
+	histpseurap->GetYaxis()->SetTitle("#frac{N}{d#eta}");
+	histpseurap->GetYaxis()->SetTitleOffset(2.2);
+	histpseurap->GetXaxis()->CenterTitle(true);
+	histpseurap->GetYaxis()->CenterTitle(true);
+	histpseurap->SetTitleSize(0.04);
+	histpseurap->SetStats(0000);
+	histpseurap->SetMarkerStyle(20);
+	histpseurap->SetMarkerSize(0.7);
+	histpseurap->Sumw2();
+	
+	for(int i = 0; i<E.size(); i++)
+	{
+		histpseurap->Fill(pseudorapidity.at(i));
+	}
+	gPad->SetLeftMargin(0.15);
+	
+	
+	
+	c4->cd(1);
+	
+	//gPad->SetRightMargin(0.001);
+	gPad->SetLeftMargin(0.16);
+	histpt->Draw();
+	
+	c4->cd(2);
+	
+	gPad->SetLeftMargin(0.16);
+	histrap->Draw();
+	
+	c4->cd(3);
+	
+	gPad->SetLeftMargin(0.16);
+	histrt->Draw();
+	
+	c4->cd(4);
+	
+	gPad->SetLeftMargin(0.16);
+	histpseurap->Draw();
+	
+	c2->SaveAs("Sigma0 - polozenia i czas.png");
+	c3->SaveAs("Sigma0 - pęd i energia.png");
+	c4->SaveAs("Sigma0 - dziwne rzeczy.png");
 	
 	
 	
