@@ -98,10 +98,10 @@ void trig(Int_t nevents=1)
 			particle->SetPy(Particle_th.py);
 			particle->SetPz(Particle_th.pz);
 			particle->SetEnergy(Particle_th.e);
-			particle->SetVx(Particle_th.x);
-			particle->SetVy(Particle_th.y);
-			particle->SetVz(Particle_th.z);
-			particle->SetTof(Particle_th.t);
+			particle->SetVx(Particle_th.x/(TMath::Power(10, 12)));
+			particle->SetVy(Particle_th.y/(TMath::Power(10, 12)));
+			particle->SetVz(Particle_th.z/(TMath::Power(10, 12)));
+			particle->SetTof(Particle_th.t/(TMath::Power(10, 12)));
 			particle->SetFirstMother(Particle_th.fatherpid);
 			particle->SetLastMother(Particle_th.fatherpid);
 			particle->SetFirstDaughter(-9999);
@@ -113,7 +113,7 @@ void trig(Int_t nevents=1)
 			
 		}
 		event_id=eventid_curr;
-		//cout<<Chain_inz->GetEntries()<<endl;
+		cout<<Chain_inz->GetEntries()<<endl;
 		cout<<"event "<<i+1<<" complete"<<endl;		
 		chain->Make();
 	}
