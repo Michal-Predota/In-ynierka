@@ -44,7 +44,7 @@ vector<int> decayed_vec, pid_vec, fatherpid_vec, rootpid_vec, fathereid_vec, eve
 char path[100];
 
 
-void trig(Int_t nevents=1)
+void trig(Int_t nevents=1, Float_t filter = 0.5)
 {
 	TChain *Chain_inz = new TChain("particles");
 	int event_id;
@@ -73,49 +73,101 @@ void trig(Int_t nevents=1)
 	
 	cout<<"Number of files: "<<number_of_files<<endl;
 	
-	for(int i=0; i<nevents; i++)
+	if(filter == 0.5)
 	{
-		
-		//cout<<path<<endl;
-		StructParticle Particle_th;
-		Chain_inz->SetBranchAddress("particle", &Particle_th);
-		
-		Chain_inz->GetEntry(particle_counter);
-		
-		event_id=Particle_th.eventid;
-		eventid_curr=Particle_th.eventid;
-		
-		while(event_id==eventid_curr)
+		for(int i=0; i<nevents; i++)
 		{
-			chain->Clear();
+		
+			StructParticle Particle_th;
+			Chain_inz->SetBranchAddress("particle", &Particle_th);
+		
 			Chain_inz->GetEntry(particle_counter);
-			StarGenParticle* particle;
-			particle = kinematics->AddParticle();
-
-			particle->SetId(Particle_th.pid);
-			particle->SetMass(Particle_th.mass);
-			particle->SetPx(Particle_th.px);
-			particle->SetPy(Particle_th.py);
-			particle->SetPz(Particle_th.pz);
-			particle->SetEnergy(Particle_th.e);
-			particle->SetVx(Particle_th.x/(TMath::Power(10, 12)));
-			particle->SetVy(Particle_th.y/(TMath::Power(10, 12)));
-			particle->SetVz(Particle_th.z/(TMath::Power(10, 12)));
-			particle->SetTof(Particle_th.t/(TMath::Power(10, 12)));
-			particle->SetFirstMother(Particle_th.fatherpid);
-			particle->SetLastMother(Particle_th.fatherpid);
-			particle->SetFirstDaughter(-9999);
-			particle->SetLastDaughter(-9999);
-			particle->SetStatus(-9999);
-			
-			particle_counter++;
+		
+			event_id=Particle_th.eventid;
 			eventid_curr=Particle_th.eventid;
-			
+		
+			while(event_id==eventid_curr)
+			{
+				chain->Clear();
+				Chain_inz->GetEntry(particle_counter);
+				if(Particle_th.pid==2212||Particle_th.pid==-2212||Particle_th.pid==111||Particle_th.pid==211||Particle_th.pid==310||Particle_th.pid==130||Particle_th.pid==321||Particle_th.pid==-211||Particle_th.pid==-321)
+				{
+					StarGenParticle* particle;
+					particle = kinematics->AddParticle();
+		
+					particle->SetId(Particle_th.pid);
+					particle->SetMass(Particle_th.mass);
+					particle->SetPx(Particle_th.px);
+					particle->SetPy(Particle_th.py);
+					particle->SetPz(Particle_th.pz);
+					particle->SetEnergy(Particle_th.e);
+					particle->SetVx(Particle_th.x/(TMath::Power(10, 12)));
+					particle->SetVy(Particle_th.y/(TMath::Power(10, 12)));
+					particle->SetVz(Particle_th.z/(TMath::Power(10, 12)));
+					particle->SetTof(Particle_th.t/(TMath::Power(10, 12)));
+					particle->SetFirstMother(Particle_th.fatherpid);
+					particle->SetLastMother(Particle_th.fatherpid);
+					particle->SetFirstDaughter(-9999);
+					particle->SetLastDaughter(-9999);
+					particle->SetStatus(1);
+				}
+				
+				particle_counter++;
+				eventid_curr=Particle_th.eventid;
+			}
+			event_id=eventid_curr;
+			cout<<"event "<<i+1<<" complete"<<endl;		
+			kinematics->Generate();
+			chain->Make();
 		}
-		event_id=eventid_curr;
-		cout<<Chain_inz->GetEntries()<<endl;
-		cout<<"event "<<i+1<<" complete"<<endl;		
-		chain->Make();
+	}
+	else
+	{
+		for(int i=0; i<nevents; i++)
+		{
+		
+			StructParticle Particle_th;
+			Chain_inz->SetBranchAddress("particle", &Particle_th);
+		
+			Chain_inz->GetEntry(particle_counter);
+		
+			event_id=Particle_th.eventid;
+			eventid_curr=Particle_th.eventid;
+		
+			while(event_id==eventid_curr)
+			{
+				chain->Clear();
+				Chain_inz->GetEntry(particle_counter);
+				if(Particle_th.pid==filter)
+				{
+					StarGenParticle* particle;
+					particle = kinematics->AddParticle();
+		
+					particle->SetId(Particle_th.pid);
+					particle->SetMass(Particle_th.mass);
+					particle->SetPx(Particle_th.px);
+					particle->SetPy(Particle_th.py);
+					particle->SetPz(Particle_th.pz);
+					particle->SetEnergy(Particle_th.e);
+					particle->SetVx(Particle_th.x/(TMath::Power(10, 12)));
+					particle->SetVy(Particle_th.y/(TMath::Power(10, 12)));
+					particle->SetVz(Particle_th.z/(TMath::Power(10, 12)));
+					particle->SetTof(Particle_th.t/(TMath::Power(10, 12)));
+					particle->SetFirstMother(Particle_th.fatherpid);
+					particle->SetLastMother(Particle_th.fatherpid);
+					particle->SetFirstDaughter(-9999);
+					particle->SetLastDaughter(-9999);
+					particle->SetStatus(1);
+				}
+				
+				particle_counter++;
+				eventid_curr=Particle_th.eventid;
+			}
+			event_id=eventid_curr;
+			cout<<"event "<<i+1<<" complete"<<endl;		
+			kinematics->Generate();
+			chain->Make();
+		}
 	}
 	
 
@@ -129,7 +181,7 @@ void Kinematics()
         _primary->AddGenerator(kinematics);
 }
 
-void starsim(Int_t nevents=1, Int_t rngSeed=1234)
+void starsim(Int_t nevents=1, Float_t filter = 0.5, Int_t rngSeed=1234)
 {
 
 	rand = new TRandom;
@@ -167,7 +219,7 @@ void starsim(Int_t nevents=1, Int_t rngSeed=1234)
 	command("gkine -4 0");
         command("gfile o own.starsim.fzd");
 
-	trig(nevents);
+	trig(nevents, filter);
 
 	chain->Finish();
 	command("call agexit");
